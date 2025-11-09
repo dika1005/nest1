@@ -15,10 +15,27 @@ datasource db {
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  first_name  String  @db.VarChar(100)
-  last_name   String? @db.VarChar(100)
+  username String  @id @db.VarChar(50)
+  email    String  @db.VarChar(255)
+  name     String  @db.VarChar(100)
+  password String  @db.VarChar(255)
+  token    String? @db.VarChar(500)
+
+  // Relation back to Contact (one User has many Contacts)
+  contacts Contact[]
 
   @@map("users")
+}
+
+model Contact {
+  id       Int     @id @default(autoincrement())
+  name     String  @db.VarChar(100)
+  email    String  @db.VarChar(255)
+  phone    String? @db.VarChar(20)
+  username String  @db.VarChar(50)
+
+  user User @relation(fields: [username], references: [username])
+
+  @@map("contacts")
 }
 
