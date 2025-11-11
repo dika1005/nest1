@@ -23,6 +23,7 @@ export class AppLogger {
   verbose(message: string, context?: string) {
     this.logger.verbose(message, context);
   }
+
   setContext(context: string) {
     // Recreate Logger instance with new context instead of mutating internal fields
     // (avoids unsafe member access and is compatible across Nest versions)
