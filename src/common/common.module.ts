@@ -3,6 +3,7 @@ import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppLogger } from './services/logger.service';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Global()
 @Module({
@@ -16,7 +17,8 @@ import { AppLogger } from './services/logger.service';
       useClass: HttpExceptionFilter,
     },
     AppLogger, // daftarkan logger sebagai provider
+    JwtAuthGuard, // daftarkan JwtAuthGuard sebagai provider
   ],
-  exports: [AppLogger], // ekspor supaya bisa di-inject di module lain
+  exports: [AppLogger, JwtAuthGuard], // ekspor supaya bisa di-inject di module lain
 })
 export class CommonModule {}
