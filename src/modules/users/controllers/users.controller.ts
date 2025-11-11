@@ -6,9 +6,11 @@ import {
   Param,
   ParseIntPipe,
 } from '@nestjs/common';
-import { UsersService } from '../users.service';
+import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
+@Public()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
