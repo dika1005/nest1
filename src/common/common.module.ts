@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppLogger } from './services/logger.service';
@@ -16,9 +16,12 @@ import { JwtAuthGuard } from './guards/jwt.guard';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    AppLogger, // daftarkan logger sebagai provider
-    JwtAuthGuard, // daftarkan JwtAuthGuard sebagai provider
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard, // guard jadi global
+    },
+    AppLogger,
   ],
-  exports: [AppLogger, JwtAuthGuard], // ekspor supaya bisa di-inject di module lain
+  exports: [AppLogger],
 })
 export class CommonModule {}
