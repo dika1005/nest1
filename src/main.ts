@@ -6,9 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // set global prefix agar route jadi /api/...
   app.setGlobalPrefix('api');
-
   app.enableCors();
 
   app.useGlobalPipes(
@@ -23,4 +21,6 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}/api`);
 }
-bootstrap();
+
+// ganti pemanggilan tanpa await menjadi explicit ignore agar lint tidak menganggap promise "mengambang"
+void bootstrap();
