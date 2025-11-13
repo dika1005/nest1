@@ -2,18 +2,19 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Body,
   Param,
   ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { Public } from 'src/common/decorators/public.decorator';
+// import { Public } from 'src/common/decorators/public.decorator';
 import { User } from 'generated/prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { UserEntity } from '../entities/user.entity';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
-@Public()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -39,6 +40,17 @@ export class UsersController {
     const user = await this.usersService.findById(id);
     if (!user) return null;
     const instance = plainToInstance(UserEntity, user, {
+      excludeExtraneousValues: true,
+    });
+    return instance as unknown as User & { full_name: string };
+  }
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateUserDto,
+  ): Promise<User & { full_name: string }> {
+    const updated = await this.usersService.update(id, dto);
+    const instance = plainToInstance(UserEntity, updated, {
       excludeExtraneousValues: true,
     });
     return instance as unknown as User & { full_name: string };
